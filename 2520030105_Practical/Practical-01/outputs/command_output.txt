@@ -1,0 +1,17 @@
+Parent process started.
+Parent PID: 672
+
+Parent waiting for child...
+
+Child process created.
+Child PID: 674
+Parent PID from child: 672
+Child executing 'ls -l' using exec().
+total 20
+-rwxrwxrwx 1 shiva shiva  1439 Aug 25 13:17 Documentation.txt
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:16 outputs
+-rwxrwxrwx 1 shiva shiva 16376 Aug 25 13:18 program
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 12:49 screenshots
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:15 src
+Child process completed.
+Parent process exiting.

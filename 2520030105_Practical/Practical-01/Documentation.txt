@@ -1,0 +1,44 @@
+PRACTICAL-01
+Process Creation and Command Execution
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Objective:
+To understand process creation and execution of a Linux command using
+fork(), exec(), and wait() system calls.
+
+Requirements:
+1. Create a child process using fork().
+2. Display the process ID of the parent and child.
+3. Use exec() to execute a Linux command from the child process.
+4. Use wait() so that the parent waits for the child process to complete.
+5. Observe the relationship between the parent and child processes.
+
+Concepts Used:
+- Process creation using fork()
+- Process identification using getpid() and getppid()
+- Command execution using execlp()
+- Parent-child synchronization using wait()
+- Error handling using perror()
+
+Source File:
+src/program.c
+
+Output File:
+outputs/command_output.txt
+
+Execution:
+The program was compiled and executed in the student's WSL Linux
+environment. The generated process IDs and command output are from
+the actual execution environment of Roll No. 2520030105.
+
+Expected Result:
+The program creates a child process. The child displays its PID and
+parent PID and executes the ls -l command using execlp(). The parent
+waits for the child process to finish and then exits.
+
+Conclusion:
+The practical demonstrates basic Linux process management concepts
+and shows how fork(), exec(), and wait() work together for process
+creation, command execution, and synchronization.
