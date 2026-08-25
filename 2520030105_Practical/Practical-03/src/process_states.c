@@ -102,7 +102,7 @@ int main(void)
 
         printf("\nSTAGE 4: Child entering sleep (waiting state)...\n");
         fflush(stdout);
-        sleep(5);
+        sleep(10);
 
         read_proc_stat(my_pid);
         read_proc_status(my_pid);
