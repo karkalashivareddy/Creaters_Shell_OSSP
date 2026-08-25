@@ -1,9 +1,57 @@
-execve("./bin/fork_demo", ["./bin/fork_demo"], 0x7fffe6180f40 /* 24 vars */) = 0
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x79f710512a10) = 431
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x79f710512a10) = 432
-wait4(431, 0x7ffcce969468, 0, NULL)     = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
---- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=432, si_uid=1000, si_status=2, si_utime=0, si_stime=0} ---
-wait4(431, [{WIFEXITED(s) && WEXITSTATUS(s) == 1}], 0, NULL) = 431
---- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=431, si_uid=1000, si_status=1, si_utime=0, si_stime=0} ---
-wait4(432, [{WIFEXITED(s) && WEXITSTATUS(s) == 2}], 0, NULL) = 432
+execve("./bin/fork_demo", ["./bin/fork_demo"], 0x7ffd61c5a130 /* 28 vars */) = 0
+brk(NULL)                               = 0x61a4a9652000
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x713800c19000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=27891, ...}) = 0
+mmap(NULL, 27891, PROT_READ, MAP_PRIVATE, 3, 0) = 0x713800c12000
+close(3)                                = 0
+openat(AT_FDCWD, "/usr/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0 \250\2\0\0\0\0\0"..., 832) = 832
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 840, 64) = 840
+fstat(3, {st_mode=S_IFREG|0755, st_size=2186512, ...}) = 0
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 840, 64) = 840
+mmap(NULL, 2231696, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x713800800000
+mmap(0x713800828000, 1671168, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x28000) = 0x713800828000
+mmap(0x7138009c0000, 319488, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7138009c0000
+mmap(0x713800a0e000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x20d000) = 0x713800a0e000
+mmap(0x713800a14000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x713800a14000
+close(3)                                = 0
+mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x713800c0f000
+arch_prctl(ARCH_SET_FS, 0x713800c0f740) = 0
+set_tid_address(0x713800c0fd68)         = 4671
+set_robust_list(0x713800c0fa20, 24)     = 0
+rseq(0x713800c0f6a0, 0x20, 0, 0x53053053) = 0
+mprotect(0x713800a0e000, 16384, PROT_READ) = 0
+mprotect(0x61a4a172f000, 4096, PROT_READ) = 0
+mprotect(0x713800c5e000, 8192, PROT_READ) = 0
+prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+getrandom("\x51\x73\x86\x60\x97\xda\xfd\xa8", 8, GRND_NONBLOCK) = 8
+munmap(0x713800c12000, 27891)           = 0
+write(1, "=== fork() Demonstration ===\n", 29) = 29
+write(1, "\n", 1)                       = 1
+getpid()                                = 4671
+write(1, "Main process PID: 4671\n", 23) = 23
+getppid()                               = 4669
+write(1, "Main process PPID: 4669\n\n", 25) = 25
+rt_sigprocmask(SIG_BLOCK, ~[], [], 8)   = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x713800c0fa10) = 4672
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+write(1, "  [Parent] Created child 1 with "..., 41) = 41
+rt_sigprocmask(SIG_BLOCK, ~[], [], 8)   = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x713800c0fa10) = 4673
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+write(1, "  [Parent] Created child 2 with "..., 41) = 41
+write(1, "\n[Parent] Waiting for both child"..., 38) = 38
+write(1, "\n", 1)                       = 1
+wait4(4672, 0x7ffe261ac378, 0, NULL)    = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4673, si_uid=1000, si_status=2, si_utime=0, si_stime=0} ---
+wait4(4672, [{WIFEXITED(s) && WEXITSTATUS(s) == 1}], 0, NULL) = 4672
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4672, si_uid=1000, si_status=1, si_utime=0, si_stime=0} ---
+write(1, "[Parent] Child 1 (PID=4672) exit"..., 49) = 49
+wait4(4673, [{WIFEXITED(s) && WEXITSTATUS(s) == 2}], 0, NULL) = 4673
+write(1, "[Parent] Child 2 (PID=4673) exit"..., 49) = 49
+write(1, "\n[Parent] All children finished."..., 41) = 41
+write(1, "\n", 1)                       = 1
+exit_group(0)                           = ?
 +++ exited with 0 +++
