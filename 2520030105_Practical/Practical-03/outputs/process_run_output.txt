@@ -1,0 +1,51 @@
+=== Process State Transitions Experiment ===
+
+STAGE 1: Parent process started.
+  Parent PID:  3860
+  Parent PPID: 2488
+    /proc/3860/stat -> PID=3860 State=R PPID=2488
+    Name:	process_states
+    State:	R (running)
+    Pid:	3860
+    PPid:	2488
+
+STAGE 2: Forking child process...
+
+STAGE 3: Parent created child (PID=3862).
+    /proc/3860/stat -> PID=3860 State=R PPID=2488
+
+STAGE 4: Parent waiting for child...
+    /proc/3860/stat -> PID=3860 State=R PPID=2488
+
+STAGE 3: Child process created.
+  Child PID:  3862
+  Child PPID: 3860
+    /proc/3862/stat -> PID=3862 State=R PPID=3860
+    Name:	process_states
+    State:	R (running)
+    Pid:	3862
+    PPid:	3860
+
+STAGE 4: Child entering sleep (waiting state)...
+    /proc/3862/stat -> PID=3862 State=R PPID=3860
+    Name:	process_states
+    State:	R (running)
+    Pid:	3862
+    PPid:	3860
+
+STAGE 5: Child performing computation (running state)...
+  Computation result: 49999995000000
+    /proc/3862/stat -> PID=3862 State=R PPID=3860
+
+STAGE 6: Child about to exit.
+    /proc/3862/stat -> PID=3862 State=R PPID=3860
+
+STAGE 6: Child finished. Parent resumed.
+  Child exited with status: 0
+    /proc/3860/stat -> PID=3860 State=R PPID=2488
+    Name:	process_states
+    State:	R (running)
+    Pid:	3860
+    PPid:	2488
+
+STAGE 7: Parent process exiting.
