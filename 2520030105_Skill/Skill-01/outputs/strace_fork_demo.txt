@@ -1,0 +1,9 @@
+execve("./bin/fork_demo", ["./bin/fork_demo"], 0x7fffe6180f40 /* 24 vars */) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x79f710512a10) = 431
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x79f710512a10) = 432
+wait4(431, 0x7ffcce969468, 0, NULL)     = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=432, si_uid=1000, si_status=2, si_utime=0, si_stime=0} ---
+wait4(431, [{WIFEXITED(s) && WEXITSTATUS(s) == 1}], 0, NULL) = 431
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=431, si_uid=1000, si_status=1, si_utime=0, si_stime=0} ---
+wait4(432, [{WIFEXITED(s) && WEXITSTATUS(s) == 2}], 0, NULL) = 432
++++ exited with 0 +++

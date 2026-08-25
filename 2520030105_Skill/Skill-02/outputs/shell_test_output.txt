@@ -1,0 +1,49 @@
+=== Mini Shell Test (non-interactive, using line-mode fallback) ===
+
+Test 1: help command
+Failed to setup terminal. Using line mode.
+minishell> Built-in commands:
+  help    - Show this help message
+  pwd     - Print current directory
+  echo    - Print text (echo <text>)
+  clear   - Clear the screen
+  exit    - Exit the shell
+  quit    - Exit the shell
+
+External commands are executed via fork()+exec().
+minishell> 
+Test 2: pwd command
+Failed to setup terminal. Using line mode.
+minishell> /mnt/c/Users/karka/Creaters_Shell_OSSP/2520030105_Skill/Skill-02
+minishell> 
+Test 3: echo command
+Failed to setup terminal. Using line mode.
+minishell> Hello World from OSSP
+minishell> 
+Test 4: external command (uname -a)
+Failed to setup terminal. Using line mode.
+Linux shiva 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+minishell> minishell> 
+Test 5: multiple commands
+Failed to setup terminal. Using line mode.
+minishell> /mnt/c/Users/karka/Creaters_Shell_OSSP/2520030105_Skill/Skill-02
+minishell> testing 123
+minishell> Built-in commands:
+  help    - Show this help message
+  pwd     - Print current directory
+  echo    - Print text (echo <text>)
+  clear   - Clear the screen
+  exit    - Exit the shell
+  quit    - Exit the shell
+
+External commands are executed via fork()+exec().
+minishell> Goodbye.
+
+Test 6: invalid command
+Failed to setup terminal. Using line mode.
+minishell: command not found: nonexistent_command
+minishell> minishell> minishell> 
+Test 7: exit command
+Failed to setup terminal. Using line mode.
+minishell> Goodbye.
+

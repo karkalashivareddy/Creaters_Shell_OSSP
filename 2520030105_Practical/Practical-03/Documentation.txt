@@ -1,0 +1,194 @@
+PRACTICAL-03
+Process Creation and State Transitions
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Objective:
+To develop a C program using fork() that creates a parent and child
+process, display their PID and PPID, and observe process state
+transitions at different stages of execution using Linux monitoring
+tools (ps, top, /proc).
+
+Requirements:
+1. Create a parent and child process using fork().
+2. Display PID and PPID of both processes.
+3. Show process states at different stages.
+4. Use ps, top, and /proc to observe state transitions.
+5. Observe Ready, Running, Waiting, and Terminated states.
+
+Source File:
+src/process_states.c
+
+Output Files:
+outputs/process_run_output.txt
+outputs/ps_parent_observation.txt
+outputs/proc_parent_status.txt
+outputs/proc_child_status.txt
+outputs/top_observation.txt
+
+Program Design:
+
+The program creates distinct observable stages:
+
+Stage 1: Parent starts and displays its PID/PPID.
+Stage 2: fork() creates a child process.
+Stage 3: Both parent and child display their PIDs.
+Stage 4: Child enters sleep() for 5 seconds (Waiting state).
+         Parent calls waitpid() (also Waiting/sleeping).
+Stage 5: Child wakes up and performs computation (Running state).
+Stage 6: Child exits (Terminated state).
+Stage 7: Parent resumes after waitpid() and exits.
+
+The program reads /proc/<pid>/stat and /proc/<pid>/status at each
+stage to show the actual kernel-tracked process state.
+
+Process States:
+
+Linux uses the following state letters in /proc/<pid>/stat:
+
+  R = Running or Runnable
+      Process is executing or ready to run on a CPU.
+
+  S = Interruptible Sleep (Waiting)
+      Process is sleeping waiting for an event (e.g., timeout,
+      I/O completion, signal).
+
+  D = Uninterruptible Sleep
+      Process is waiting for I/O and cannot be interrupted.
+
+  T = Stopped
+      Process has been stopped by a signal (e.g., SIGSTOP).
+
+  Z = Zombie
+      Process has exited but parent has not yet collected its
+      exit status via wait().
+
+Mapping to Textbook States:
+
+  Textbook        Linux (/proc)         Explanation
+  --------        -------------         -----------
+  Ready           R (Runnable)          Process is in the run queue,
+                                        waiting for CPU time.
+
+  Running         R (Running)           Process is currently executing
+                                        on a CPU. In ps/top, R covers
+                                        both ready and running.
+
+  Waiting         S (Sleeping)          Process is blocked waiting for
+                                        an event (sleep(), wait(),
+                                        I/O).
+
+  Terminated      Process exited        Process no longer exists in
+                  (not in ps)           /proc. Parent collects status
+                                        via wait()/waitpid().
+
+Note: Linux does not distinguish between "Ready" and "Running" in
+the state letter. Both are shown as R. A process in the run queue
+but not yet on a CPU is technically "Ready/Runnable." A process
+currently on a CPU is "Running." The ps command shows both as R.
+
+Observations:
+
+--- Program Execution Output (outputs/process_run_output.txt) ---
+
+  STAGE 1: Parent PID=436, PPID=435, State=R (Running/Runnable)
+  STAGE 3: Child PID=437, PPID=436, State=R (Running/Runnable)
+  STAGE 4: Child entering sleep (Waiting state)
+           Child State read as R (about to enter sleep)
+  STAGE 5: Child computation result: 49999995000000, State=R
+  STAGE 6: Child exiting, State=R
+  STAGE 6: Parent resumed, child exited with status 0
+
+--- ps Observation (outputs/ps_parent_observation.txt) ---
+
+  Initial observation:
+    PID  PPID STAT CMD
+    401   318 S+   ./process_states   (parent, sleeping in wait)
+    409   401 S+   ./process_states   (child, sleeping in sleep)
+
+  During child sleep:
+    Parent PID 401 observed in S state (waiting via waitpid)
+    Child PID 409 observed in S state (sleeping for 5 seconds)
+
+  After completion:
+    Process 401 has exited (no longer visible in ps)
+
+--- /proc/status Observation ---
+
+  Parent (/proc/401/status):
+    Name:   process_states
+    State:  S (sleeping)
+    Pid:    401
+    PPid:   318
+    Threads: 1
+    voluntary_ctxt_switches: 60
+
+  Child (/proc/409/status):
+    Name:   process_states
+    State:  S (sleeping)
+    Pid:    409
+    PPid:   401
+    Threads: 1
+    voluntary_ctxt_switches: 28
+
+--- top Observation (outputs/top_observation.txt) ---
+
+  top output showed:
+    Tasks: 1 total, 0 running, 1 sleeping
+    PID 401 in S (sleeping) state
+    Virtual memory: 2768 kB, Resident: 1936 kB
+
+  This confirms the parent was in a sleeping/waiting state
+  while waiting for the child to complete.
+
+Process Lifecycle Analysis:
+
+1. Created (fork):
+   fork() creates a new process. The child starts in R (runnable)
+   state immediately after creation.
+
+2. Running:
+   Both parent and child execute instructions. The child performs
+   a computation loop, visible as R state in /proc.
+
+3. Waiting:
+   The child calls sleep(5), entering S (interruptible sleep).
+   The parent calls waitpid(), also entering S state until the
+   child terminates.
+
+4. Terminated:
+   The child calls exit(0), terminating the process. The parent
+   collects the exit status via waitpid() and continues.
+
+Parent-Child Relationship:
+
+  PID 318 (bash)
+    |
+    +-- PID 401 (parent, process_states)
+          |
+          +-- PID 409 (child, process_states)
+
+The parent (PID 401) is a child of bash (PID 318).
+The child (PID 409) is a child of the parent (PID 401).
+After the child exits, the parent collects its status and continues.
+
+Result:
+The program successfully demonstrates process creation using fork(),
+observable process state transitions through /proc, ps, and top,
+and proper parent-child synchronization using waitpid(). The Linux
+process states (R, S, D, T, Z) were observed and mapped to the
+textbook process lifecycle states (Ready, Running, Waiting,
+Terminated).
+
+Conclusion:
+The practical demonstrates that Linux processes go through distinct
+states during their lifecycle. The fork() system call creates a new
+process, and the kernel tracks each process's state in /proc. The
+ps command shows process states as single letters (R, S, D, T, Z),
+while /proc/<pid>/status provides detailed status information.
+The wait()/waitpid() system calls allow parent processes to
+synchronize with child process termination, completing the process
+lifecycle.

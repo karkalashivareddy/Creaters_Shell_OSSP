@@ -1,0 +1,149 @@
+SKILL-01
+Linux Environment, Process Abstraction, and System Call Tracing
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Section 1: Linux Environment Setup and Process Analysis
+
+1. Linux Environment Verification
+
+Linux environment used: WSL (Windows Subsystem for Linux)
+
+uname -a:
+  Linux shiva 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC
+  Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+
+  Shows kernel version, architecture (x86_64), and OS type. WSL2 runs
+  a real Linux kernel on top of Windows Hyper-V.
+
+gcc --version:
+  gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+  GCC is installed and configured for compiling C programs on Linux.
+
+git --version:
+  git version 2.53.0
+
+  Git is available for version control and repository management.
+
+2. Project Structure
+
+Skill-01/
+  Makefile          - Build automation
+  src/fork_demo.c   - fork() demonstration
+  src/exec_demo.c   - exec() family demonstration
+  outputs/          - Captured output files
+  screenshots/      - (reserved)
+
+3. Makefile
+
+The Makefile provides targets:
+  make all       - Compile both programs
+  make run_fork  - Run fork_demo
+  make run_exec  - Run exec_demo
+  make run       - Compile and run both
+  make clean     - Remove binaries
+
+Build commands:
+  gcc -Wall -Wextra src/fork_demo.c -o bin/fork_demo
+  gcc -Wall -Wextra src/exec_demo.c -o bin/exec_demo
+
+Both programs compiled without warnings.
+
+4. Process Abstraction
+
+A process is an instance of a running program. The OS kernel creates
+and manages processes, providing each with:
+  - A unique Process ID (PID)
+  - Its own virtual address space
+  - File descriptors
+  - Signal handlers
+  - A priority/scheduling class
+
+Process Tree (observed via ps -ef):
+  PID 1 (systemd/init) is the root of all processes.
+  Each process has a parent (PPID) forming a tree structure.
+
+5. fork() System Call
+
+fork() creates a new process by duplicating the calling process.
+  - Returns 0 in the child process
+  - Returns child PID in the parent process
+  - Returns -1 on failure
+
+Demonstration (fork_demo.c):
+  Main process (PID 459) created:
+    Child 1 (PID 460) - exited with status 1
+    Child 2 (PID 461) - exited with status 2
+  Parent waited for both children using waitpid().
+
+6. exec() Family
+
+exec() replaces the current process image with a new program.
+The exec family includes:
+  - execl():  Takes argument list as separate parameters
+  - execlp(): Searches PATH for the executable
+  - execv():  Takes argument vector (array)
+  - execvp(): Takes argument vector and searches PATH
+
+Demonstration (exec_demo.c):
+  Test 1: execlp("ls", "ls", "-l") - listed directory contents
+  Test 2: execvp("uname", args)    - displayed system information
+  Test 3: execl("/bin/date", "date") - displayed current date/time
+
+All three exec variants successfully replaced the child process
+image with the specified command.
+
+7. Parent-Child Relationship
+
+  Main Process (PID 463)
+    |
+    +-- Child (PID 464) -> execlp() -> ls -l
+    |
+    +-- Child (PID 465) -> execvp() -> uname -a
+    |
+    +-- Child (PID 466) -> execl() -> date
+
+Each child is created by fork(), then exec() replaces its program.
+The parent uses wait() to synchronize with each child.
+
+8. System Call Tracing (strace)
+
+strace traces system calls made by a program. For fork_demo:
+
+  execve("./bin/fork_demo", ...) = 0
+    - Initial program execution
+
+  clone(...) = 431
+    - fork() implemented as clone() on Linux
+    - Creates first child process (PID 431)
+
+  clone(...) = 432
+    - Creates second child process (PID 432)
+
+  wait4(431, ...) = 431
+    - Parent waits for child 1
+
+  --- SIGCHLD {si_pid=432, si_status=2} ---
+    - Child 2 sent SIGCHLD signal on exit with status 2
+
+  wait4(432, ...) = 432
+    - Parent collects child 2 exit status
+
+  +++ exited with 0 +++
+    - Parent process exits successfully
+
+Key observations:
+  - fork() is implemented via clone() system call
+  - SIGCHLD signal notifies parent of child termination
+  - wait4() collects child exit status
+
+Conclusion:
+This skill demonstrates the Linux development environment setup,
+process creation using fork(), command execution using the exec()
+family, parent-child process relationships, and system call tracing
+using strace. These are fundamental concepts for understanding
+operating system process management.

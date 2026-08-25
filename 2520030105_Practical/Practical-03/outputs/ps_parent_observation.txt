@@ -1,0 +1,18 @@
+=== Parent process observation ===
+    PID    PPID STAT CMD
+    401     318 S+   ./process_states
+
+Child PID: 409
+=== Child process observation (initial) ===
+    PID    PPID STAT CMD
+    409     401 S+   ./process_states
+
+
+=== Parent process observation (during child sleep) ===
+    PID    PPID STAT CMD
+=== Child process observation (during sleep) ===
+    PID    PPID STAT CMD
+
+=== After process completion ===
+    PID    PPID STAT CMD
+Process 401 has exited

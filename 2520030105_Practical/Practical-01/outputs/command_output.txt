@@ -1,17 +1,17 @@
-Parent process started.
-Parent PID: 672
+Enter a Linux command: Parent process started.
+Parent PID: 419
 
 Parent waiting for child...
 
 Child process created.
-Child PID: 674
-Parent PID from child: 672
-Child executing 'ls -l' using exec().
-total 20
+Child PID: 420
+Parent PID from child: 419
+Child executing command using exec().
+total 24
 -rwxrwxrwx 1 shiva shiva  1439 Aug 25 13:17 Documentation.txt
-drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:16 outputs
--rwxrwxrwx 1 shiva shiva 16376 Aug 25 13:18 program
-drwxrwxrwx 1 shiva shiva  4096 Aug 25 12:49 screenshots
-drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:15 src
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:20 outputs
+-rwxrwxrwx 1 shiva shiva 16592 Aug 25 13:39 program
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:20 screenshots
+drwxrwxrwx 1 shiva shiva  4096 Aug 25 13:20 src
 Child process completed.
 Parent process exiting.

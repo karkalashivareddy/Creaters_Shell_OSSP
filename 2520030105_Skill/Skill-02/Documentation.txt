@@ -1,0 +1,206 @@
+SKILL-02
+Interactive Shell - Main Loop, Input Buffer, and Keyboard Handling
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Section 1: Interactive Loop and Shell Architecture
+
+Objective:
+To create a simple interactive shell program in C that demonstrates
+a main loop, prompt display, user input capture, backspace/Enter
+handling, input buffer management, multi-character command parsing,
+and exit conditions.
+
+Source File:
+src/mini_shell.c
+
+Output File:
+outputs/shell_test_output.txt
+
+Shell Architecture:
+
+The mini shell implements a Read-Eval-Print Loop (REPL):
+1. Display prompt
+2. Read user input (character by character)
+3. Parse and evaluate the command
+4. Print result
+5. Loop back to step 1
+
+Supported Commands:
+  help    - Display available commands
+  pwd     - Print current working directory
+  echo    - Print text to stdout
+  clear   - Clear the terminal screen
+  exit    - Exit the shell
+  quit    - Exit the shell
+  (any other) - Execute as external command via fork()+execvp()
+
+Control Flow Diagram:
+
+  START
+    |
+    v
+  +------------------+
+  | Setup Terminal    |
+  | (raw mode, no    |
+  |  echo, no ICANON)|
+  +------------------+
+    |
+    v
+  +------------------+
+  | Display Prompt   |
+  | "minishell> "    |
+  +------------------+
+    |
+    v
+  +------------------+
+  | Read Keyboard    |<---------------------+
+  | Input (char)     |                      |
+  +------------------+                      |
+    |                                       |
+    v                                       |
+  +------------------+                      |
+  | Enter pressed?   |                      |
+  +------------------+                      |
+   /        \                               |
+  yes        no                             |
+  |          |                              |
+  |          v                              |
+  |    +-----------+                        |
+  |    | Backspace? |                       |
+  |    +-----------+                        |
+  |     /       \                           |
+  |    yes       no                         |
+  |    |          |                         |
+  |    v          v                         |
+  |  +------+  +--------+                  |
+  |  |Remove|  |Append  |                  |
+  |  |last  |  |char to |                  |
+  |  |char  |  |buffer  |                  |
+  |  |from  |  |        |                  |
+  |  |buffer|  +--------+                  |
+  |  +------+       |                       |
+  |     |           |                       |
+  |     +-----+-----+                       |
+  |           |                              |
+  |           +------------------------------+
+  |
+  v
+  +------------------+
+  | Null-terminate   |
+  | buffer           |
+  +------------------+
+    |
+    v
+  +------------------+
+  | Parse command    |
+  | (tokenize input) |
+  +------------------+
+    |
+    v
+  +------------------+
+  | Exit command?    |
+  +------------------+
+   /        \
+  yes        no
+  |          |
+  v          v
++------+  +-----------+
+|Restore| |Execute     |
+|term   | |command     |
+|& EXIT | |(builtin or |
++------+  | external)  |
+          +-----------+
+               |
+               +-----------> Display Prompt (loop back)
+
+Keyboard Input Handling:
+
+1. Enter Key (\\n / \\r):
+   - Terminates current input
+   - Null-terminates the buffer
+   - Processes the command
+   - Resets buffer position
+   - Redisplays prompt
+
+2. Backspace (127 / 8):
+   - Decrements buffer position
+   - Erases last character on screen
+   - Uses \\b space \\b sequence for visual erase
+
+3. Ctrl+D (EOF, value 4):
+   - Clean exit from shell
+
+4. Ctrl+C (SIGINT):
+   - Signal handler restores terminal
+   - Prints goodbye message
+   - Exits cleanly
+
+5. Regular Characters (32-126):
+   - Appended to input buffer
+   - Echoed to screen
+   - Buffer overflow protection (MAX_INPUT=256)
+
+Input Buffer Management:
+  - Fixed-size buffer of 256 characters
+  - Position tracker (pos) for current insertion point
+  - Backspace prevents underflow (pos > 0 check)
+  - Input prevents overflow (pos < MAX_INPUT - 1)
+
+Terminal Mode:
+  - Raw mode: disables ICANON (canonical mode) and ECHO
+  - Characters available immediately without waiting for Enter
+  - Terminal settings restored on exit or signal
+
+Section 2: Testing
+
+Test 1 - help command:
+  Input: help
+  Output: Displays list of built-in commands
+
+Test 2 - pwd command:
+  Input: pwd
+  Output: /mnt/c/Users/karka/Creaters_Shell_OSSP/2520030105_Skill/Skill-02
+
+Test 3 - echo command:
+  Input: echo Hello World from OSSP
+  Output: Hello World from OSSP
+
+Test 4 - external command:
+  Input: uname -a
+  Output: Linux shiva 6.18.33.2-microsoft-standard-WSL2 ...
+
+Test 5 - multiple commands:
+  Input: pwd, echo testing 123, help, exit
+  Output: Correct output for each command, shell exits
+
+Test 6 - invalid command:
+  Input: nonexistent_command
+  Output: minishell: command not found: nonexistent_command
+
+Test 7 - exit command:
+  Input: exit
+  Output: Goodbye. (shell terminates)
+
+Edge Cases Handled:
+  - Empty input (just Enter) - no action, prompt redisplayed
+  - Buffer overflow prevention
+  - Backspace at position 0 (no effect)
+  - Non-TTY fallback to line mode (fgets)
+  - Signal handling for clean terminal restoration
+
+Result:
+The mini shell successfully demonstrates all required concepts:
+main loop, prompt, character-level input, backspace handling,
+Enter processing, input buffer management, multi-character
+commands, exit conditions, and command execution.
+
+Conclusion:
+This skill demonstrates the fundamental components of an interactive
+shell: the main loop pattern, terminal raw mode for character-level
+input, input buffer management, and command parsing. These concepts
+form the foundation for understanding how shells like bash interact
+with the terminal and process user commands.

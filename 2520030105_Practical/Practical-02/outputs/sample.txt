@@ -1,0 +1,6 @@
+This is a sample text file for testing file copy.
+It contains multiple lines of text.
+The file copy program uses open(), read(), write(), and close()
+system calls to copy this content to a new file.
+Line 5: Testing the buffer and partial write handling.
+Line 6: Final line of the sample file.

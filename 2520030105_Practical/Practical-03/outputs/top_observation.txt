@@ -1,0 +1,9 @@
+=== top output during execution ===
+top - 14:04:27 up 2 min,  1 user,  load average: 0.18, 0.10, 0.03
+Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.8 sy,  0.0 ni, 99.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :   7762.6 total,   5887.9 free,    676.5 used,   1350.7 buff/cache     
+MiB Swap:   2048.0 total,   2048.0 free,      0.0 used.   7086.2 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    401 shiva     20   0    2768   1936   1840 S   0.0   0.0   0:00.00 process+

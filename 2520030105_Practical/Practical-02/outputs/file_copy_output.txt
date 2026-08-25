@@ -1,0 +1,14 @@
+=== Test 1: Normal file copy ===
+File copied successfully.
+Source: outputs/sample.txt
+Destination: outputs/copied.txt
+Total bytes copied: 293
+
+=== Verification: cmp ===
+Files are identical
+
+=== Test 2: Missing source file ===
+Error opening source file: No such file or directory
+
+=== Test 3: Permission denied ===
+Error creating destination file: Permission denied

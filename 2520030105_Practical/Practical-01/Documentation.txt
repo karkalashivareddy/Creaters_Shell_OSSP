@@ -1,26 +1,24 @@
 PRACTICAL-01
 Process Creation and Command Execution
 
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
 Student Name : Karkala Shiva Reddy
 Roll Number  : 2520030105
 
 Objective:
-To understand process creation and execution of a Linux command using
-fork(), exec(), and wait() system calls.
+To understand process creation and execution of a Linux command
+entered by a user using fork(), exec(), and wait() system calls,
+and to investigate the relationship between hardware resources and
+operating system services.
 
 Requirements:
-1. Create a child process using fork().
-2. Display the process ID of the parent and child.
-3. Use exec() to execute a Linux command from the child process.
-4. Use wait() so that the parent waits for the child process to complete.
-5. Observe the relationship between the parent and child processes.
-
-Concepts Used:
-- Process creation using fork()
-- Process identification using getpid() and getppid()
-- Command execution using execlp()
-- Parent-child synchronization using wait()
-- Error handling using perror()
+1. Accept a Linux command as input from the user.
+2. Create a child process using fork().
+3. Execute the command in the child process using execvp().
+4. Allow the parent process to wait for the child using wait().
+5. Display the Process ID (PID) of both parent and child processes.
+6. Investigate hardware and OS relationships using Linux commands.
 
 Source File:
 src/program.c
@@ -28,17 +26,148 @@ src/program.c
 Output File:
 outputs/command_output.txt
 
-Execution:
-The program was compiled and executed in the student's WSL Linux
-environment. The generated process IDs and command output are from
-the actual execution environment of Roll No. 2520030105.
+How the C Program Works:
 
-Expected Result:
-The program creates a child process. The child displays its PID and
-parent PID and executes the ls -l command using execlp(). The parent
-waits for the child process to finish and then exits.
+1. The program prompts the user to enter a Linux command.
+2. The input is read using fgets() and tokenized into arguments
+   using strtok() with space and tab as delimiters.
+3. The parent process displays its PID using getpid().
+4. fork() is called to create a child process.
+5. If fork() returns 0, the child process executes the entered
+   command using execvp(), which searches PATH for the command.
+6. If fork() returns a positive value, the parent calls wait()
+   to block until the child terminates.
+7. After the child finishes, the parent prints a completion message.
+
+Key System Calls:
+- fork(): Creates a new child process by duplicating the parent.
+  Returns 0 in the child and the child's PID in the parent.
+- execvp(): Replaces the child's program image with the specified
+  command. Accepts an argument array, supporting commands with
+  arguments (e.g., ls -l, uname -a).
+- wait(): Causes the parent to suspend execution until the child
+  terminates. Ensures proper synchronization.
+- getpid(): Returns the process ID of the calling process.
+- getppid(): Returns the parent process ID of the calling process.
+
+Hardware and OS Investigation:
+
+The following Linux commands were used to investigate the relationship
+between hardware resources and operating system services.
+
+--- uname -a ---
+Output (from outputs/hardware_uname.txt):
+Linux shiva 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC
+Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+
+Analysis:
+uname reveals kernel and OS information. The kernel version
+(6.18.33.2), architecture (x86_64), and OS type (GNU/Linux) show
+how the OS abstracts the underlying hardware. The kernel provides
+a uniform interface regardless of the physical CPU. In WSL2, the
+Linux kernel runs on top of the Windows Hyper-V hypervisor,
+demonstrating an additional layer of abstraction.
+
+--- lscpu ---
+Output (from outputs/hardware_lscpu.txt):
+Architecture:            x86_64
+CPU(s):                  12
+Model name:              13th Gen Intel(R) Core(TM) i5-1334U
+Thread(s) per core:      2
+Core(s) per socket:      6
+Socket(s):               1
+Virtualization:          VT-x
+Hypervisor vendor:       Microsoft
+
+Analysis:
+lscpu shows CPU architecture and topology. The OS reports 12 logical
+CPUs from 6 physical cores with hyper-threading. The OS abstracts
+these cores as schedulable processors. The kernel's scheduler
+distributes tasks across these CPUs. Applications see a uniform set
+of processors without needing to know the physical hardware layout.
+The hypervisor vendor (Microsoft) indicates WSL2 virtualization.
+
+--- lsblk ---
+Output (from outputs/hardware_lsblk.txt):
+NAME MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda    8:0    0 356.9M  1 disk
+sdb    8:16   0 159.4M  1 disk
+sdc    8:32   0     2G  0 disk [SWAP]
+sdd    8:48   0     1T  0 disk /mnt/wslg/distro /
+
+Analysis:
+lsblk shows block storage devices. The OS presents physical and
+virtual disks as block devices with logical names (sda, sdb, etc.).
+The root filesystem (/) resides on sdd (1TB virtual disk). The OS
+abstracts storage through the VFS (Virtual File System) layer,
+providing a unified file-based interface to different storage
+devices. Swap space (sdc) provides virtual memory by using disk
+as an extension of RAM.
+
+--- ps ---
+Output (from outputs/hardware_ps.txt):
+Shows 67+ processes including systemd, udev workers, snapd,
+rsyslogd, bash sessions, etc.
+
+Analysis:
+ps reveals the OS process abstraction. Each running program is
+represented as a process with a unique PID. The OS schedules these
+processes on the available CPUs. Process states (running, sleeping,
+zombie) show how the kernel manages execution. The init/systemd
+process (PID 1) is the ancestor of all user processes, demonstrating
+the process tree structure managed by the kernel.
+
+--- top ---
+Output (from outputs/hardware_top.txt):
+Tasks: 67 total, 1 running, 66 sleeping, 0 stopped, 0 zombie
+%Cpu(s): 0.0 us, 0.8 sy, 0.0 ni, 99.2 id
+MiB Mem: 7762.6 total, 5883.9 free, 679.5 used
+MiB Swap: 2048.0 total, 2048.0 free, 0.0 used
+
+Analysis:
+top provides dynamic real-time monitoring. It shows CPU utilization
+(user/system/idle), memory usage (total/free/used), and per-process
+resource consumption. The OS abstracts physical RAM into virtual
+memory pages. The load average (0.48, 0.54, 0.23) shows the kernel's
+view of CPU demand over 1, 5, and 15 minute intervals.
+
+OS Abstractions:
+
+CPU Abstraction:
+The OS kernel acts as a scheduler, abstracting multiple CPU cores
+into a shared pool of processing time. Each process believes it has
+access to a CPU, while the kernel time-slices the actual hardware
+among all runnable processes. The 12 logical CPUs reported by lscpu
+are managed by the kernel scheduler.
+
+Memory Abstraction:
+The OS provides virtual memory to each process, giving it an
+isolated address space. Physical RAM (7762.6 MiB) is managed by the
+kernel through paging and swapping. The swap partition extends
+available memory. Processes cannot directly access physical memory;
+the kernel mediates all memory access.
+
+Storage Abstraction:
+The VFS layer provides a unified file interface regardless of the
+underlying storage device. Block devices (sda-sdd) are presented
+as files under /dev. The mount system call attaches filesystems to
+directories. Applications use open/read/write/close without knowing
+the physical disk geometry.
+
+I/O Device Abstraction:
+Device drivers translate hardware-specific operations into standard
+system calls. The udev subsystem (visible in ps output with many
+udev-worker processes) manages device detection and configuration.
+Applications interact with devices through file descriptors, treating
+hardware I/O as file operations.
 
 Conclusion:
-The practical demonstrates basic Linux process management concepts
-and shows how fork(), exec(), and wait() work together for process
-creation, command execution, and synchronization.
+The practical demonstrates how Linux processes are created using
+fork() and how commands are executed using exec(). The hardware
+investigation shows that applications do not directly manipulate
+hardware. Instead, the OS kernel provides abstractions for CPU
+scheduling, memory management, storage access, and I/O operations
+through system calls and device drivers. The observed Linux commands
+(uname, lscpu, lsblk, ps, top) each reveal different aspects of
+how the OS bridges the gap between physical hardware and user-level
+applications.

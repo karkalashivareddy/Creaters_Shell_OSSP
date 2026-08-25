@@ -1,0 +1,61 @@
+=== Environment Verification ===
+
+--- uname -a ---
+Linux shiva 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+
+--- gcc --version ---
+gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+--- git --version ---
+git version 2.53.0
+
+--- pwd ---
+/mnt/c/Users/karka/Creaters_Shell_OSSP/2520030105_Skill/Skill-01
+
+--- Working Directory Contents ---
+total 4
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 14:15 .
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 13:21 ..
+-rwxrwxrwx 1 shiva shiva    0 Aug 25 13:21 .gitkeep
+-rwxrwxrwx 1 shiva shiva    0 Aug 25 12:48 Documentation.txt
+-rwxrwxrwx 1 shiva shiva  529 Aug 25 14:13 Makefile
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 14:14 bin
+-rwxrwxrwx 1 shiva shiva 1334 Aug 25 14:15 capture_env.sh
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 14:14 outputs
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 13:21 screenshots
+drwxrwxrwx 1 shiva shiva 4096 Aug 25 14:13 src
+
+=== Process Tree ===
+--- ps -ef (first 30 lines) ---
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0 16 14:15 ?        00:00:00 /sbin/init
+root           2       1  0 14:15 hvc0     00:00:00 /init
+root           6       2  0 14:15 hvc0     00:00:00 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+root          46       1  4 14:15 ?        00:00:00 /usr/lib/systemd/systemd-journald
+systemd+      78       1  2 14:15 ?        00:00:00 /usr/lib/systemd/systemd-resolved
+root          84       1  5 14:15 ?        00:00:00 /usr/lib/systemd/systemd-udevd
+root         103      84  0 14:15 ?        00:00:00 (udev-worker)
+root         104      84  0 14:15 ?        00:00:00 (udev-worker)
+root         105      84  0 14:15 ?        00:00:00 (udev-worker)
+root         106      84  0 14:15 ?        00:00:00 (udev-worker)
+root         107      84  0 14:15 ?        00:00:00 (udev-worker)
+root         108      84  0 14:15 ?        00:00:00 (udev-worker)
+root         109      84  0 14:15 ?        00:00:00 (udev-worker)
+root         110      84  0 14:15 ?        00:00:00 (udev-worker)
+root         111      84  0 14:15 ?        00:00:00 (udev-worker)
+root         112      84  0 14:15 ?        00:00:00 (udev-worker)
+root         113      84  0 14:15 ?        00:00:00 (udev-worker)
+root         114      84  0 14:15 ?        00:00:00 (udev-worker)
+root         115      84  0 14:15 ?        00:00:00 (udev-worker)
+root         116      84  0 14:15 ?        00:00:00 (udev-worker)
+root         117      84  0 14:15 ?        00:00:00 (udev-worker)
+root         118      84  0 14:15 ?        00:00:00 (udev-worker)
+root         119      84  0 14:15 ?        00:00:00 (udev-worker)
+root         120      84  0 14:15 ?        00:00:00 (udev-worker)
+root         121      84  0 14:15 ?        00:00:00 (udev-worker)
+root         122      84  0 14:15 ?        00:00:00 (udev-worker)
+root         123      84  0 14:15 ?        00:00:00 (udev-worker)
+root         124      84  0 14:15 ?        00:00:00 (udev-worker)
+root         125      84  0 14:15 ?        00:00:00 (udev-worker)
+
+=== strace demo on fork_demo ===
