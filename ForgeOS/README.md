@@ -2,7 +2,14 @@
 
 ## OSSP Project
 
-This project is a Linux-based system programming application for monitoring and controlling running processes.
+A Linux-based system programming project developed using C and Linux/POSIX interfaces.
+
+## Team
+
+| Name | Roll Number |
+|---|---|
+| Karkala Shiva Reddy | 2520030105 |
+| Dakur Manoj Kumar | 2520030040 |
 
 ## Project Scope
 
@@ -18,11 +25,12 @@ The system will provide a terminal-based interface to:
 
 ## Linux/POSIX Technologies
 
-The implementation will use C on Ubuntu/Linux and will demonstrate:
+The implementation will demonstrate:
 
 - Linux `/proc` filesystem
 - POSIX/Linux file and directory interfaces
-- File descriptors and file I/O
+- File descriptors
+- File I/O
 - Linux system calls
 - Process management
 - Linux signals
@@ -30,15 +38,28 @@ The implementation will use C on Ubuntu/Linux and will demonstrate:
 - `SIGCONT`
 - `SIGTERM`
 - `SIGKILL`
+
+## Development Tools
+
+- Ubuntu/Linux
+- C
+- GCC
+- GNU Make
 - GDB
 - strace
+- Git
+- GitHub
 
 ## Documentation
 
-The project abstract is available in:
+### Abstract
 
 `docs/OSSP_Abstract.md`
 
+### Team Contributions
+
+`docs/TEAM_CONTRIBUTIONS.md`
+
 ## Project Status
 
-Project title and abstract documentation prepared according to the OSSP project requirements. Implementation and testing will be added in subsequent stages.
+The project title, abstract, problem statement, objectives, methodology, Linux/POSIX concepts, team contributions, tools, and expected outcome have been documented. Implementation and testing will be added in subsequent development stages.

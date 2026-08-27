@@ -27,3 +27,18 @@ Linux systems may run many processes simultaneously, making it difficult for use
 3. To provide controlled process-management operations such as pausing, resuming, and terminating processes using Linux signals and system calls.
 
 4. To demonstrate practical Operating Systems and Linux/POSIX system-programming concepts through a functional command-line application and analyze its behavior using appropriate testing and system-analysis tools.
+
+## Tools / Platforms / Software Used
+
+- Ubuntu/Linux
+- C programming language
+- GCC compiler
+- GNU Make
+- Visual Studio Code
+- GDB debugger
+- strace system-call analysis tool
+- Git and GitHub
+
+## Expected Outcome
+
+The expected outcome is a functional command-line Linux process monitoring and control system that can retrieve information about running processes through the `/proc` filesystem and provide controlled process-management operations using Linux signals and system calls. The project will demonstrate practical understanding of process management, Linux/POSIX system interfaces, file I/O, file descriptors, signals, debugging, and system-call analysis. The completed system will be tested on Ubuntu/Linux and supported by source code, documentation, test results, screenshots, and demonstration evidence.
