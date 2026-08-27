@@ -1,28 +1,36 @@
-# Creaters_Shell_OSSP
+﻿# Creaters_Shell_OSSP
 
 ## OSSP Project
 
-### Linux Process Monitoring and Control System
+### Project Title
 
-The project is developed as a Linux-based system programming application using C and Linux/POSIX interfaces.
+**Linux Process Monitoring and Control System**
+
+### Team Members
+
+| Name | Roll Number |
+|---|---|
+| Karkala Shiva Reddy | 2520030105 |
+| Dakur Manoj Kumar | 2520030040 |
 
 ### Project Directory
 
-The project is maintained in:
+The OSSP project is maintained in:
 
 `ForgeOS/`
 
 ### Project Documentation
 
-The project abstract is available at:
-
-`ForgeOS/docs/OSSP_Abstract.md`
+- [Project README](ForgeOS/README.md)
+- [Project Title](ForgeOS/PROJECT_TITLE.md)
+- [Abstract](ForgeOS/docs/OSSP_Abstract.md)
+- [Team Contributions](ForgeOS/docs/TEAM_CONTRIBUTIONS.md)
 
 ### Core Technologies
 
 - C
-- Linux / Ubuntu
-- POSIX system calls
+- Ubuntu/Linux
+- Linux/POSIX system calls
 - `/proc` filesystem
 - Process management
 - Linux signals
@@ -33,4 +41,4 @@ The project abstract is available at:
 
 ### Project Status
 
-Project title and abstract have been prepared. Implementation, testing, screenshots, and final documentation will be added during the project development stages.
+The project title, abstract, problem statement, objectives, proposed methodology, Linux/POSIX concepts, team contributions, tools, and expected outcome have been documented. Implementation and testing will be completed in subsequent development stages.
