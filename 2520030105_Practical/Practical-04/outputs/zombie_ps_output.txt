@@ -1,3 +1,3 @@
-$ ps -l | grep defunct
 F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
-Z    1000    4211    4210  0  80   0     0 -      pts/0    00:00:00 zombie <defunct>
+0 S  1000    4980    4962  0  80   0 -   822 hrtime pts/4    00:00:00 zombie1
+1 Z  1000    4982    4980  0  80   0 -     0 -      pts/4    00:00:00 zombie1

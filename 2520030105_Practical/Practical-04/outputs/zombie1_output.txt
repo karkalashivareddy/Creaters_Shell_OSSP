@@ -1,17 +1,9 @@
-$ gcc -o zombie1 zombie1.c
-$ ./zombie1
-=== Zombie Process - Multiple Children ===
-
-Parent PID: 4305
-Child 1 (PID: 4306) exiting immediately.
-Child 2 (PID: 4307) exiting immediately.
-Parent created two children: PID 4306 and PID 4307
-Both children have exited. They are zombies now.
-Run 'ps -l' in another terminal to see zombie (Z) state.
-
-Parent collecting child 1 exit status...
-  Child 1 exited with status: 1
-Parent collecting child 2 exit status...
-  Child 2 exited with status: 2
-
-All zombies cleaned up. Parent exiting.
+Parent process 1 pid = 4980
+Child process 1 pid = 4982
+Parent process complete
+Parent process 2 pid = 4980
+Child process 2 pid = 4994
+Parent process complete
+Parent process 3 pid = 4980
+Child process 3 pid = 5001
+Parent process complete

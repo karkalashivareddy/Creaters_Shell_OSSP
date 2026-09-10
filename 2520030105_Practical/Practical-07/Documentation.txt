@@ -7,17 +7,18 @@ Student Name : Karkala Shiva Reddy
 Roll Number  : 2520030105
 
 Objective:
-To implement POSIX signal handling in a C program, register
-custom signal handlers for SIGINT, SIGTERM, and SIGUSR1,
-and observe signal delivery using commands from another
-terminal.
+To handle POSIX signals (SIGINT, SIGTERM and SIGUSR1) in a C
+program using the signal() system call, and to verify the
+handlers by sending signals to the process from another
+terminal using the kill command.
 
 Requirements:
-1. Register signal handlers using signal() system call.
-2. Handle SIGINT (Ctrl+C interrupt).
+1. Register a signal handler using signal().
+2. Handle SIGINT (interrupt from keyboard / kill -INT).
 3. Handle SIGTERM (termination request).
 4. Handle SIGUSR1 (user-defined signal 1).
-5. Demonstrate signal handling from another terminal.
+5. Display the process PID and verify the handlers by sending
+   signals from another terminal.
 
 Source File:
 src/sighandle.c
@@ -27,103 +28,94 @@ outputs/sighandle_output.txt
 
 Program Design:
 
-  Signal Handlers:
-    - handle_sigint():  Handles SIGINT (signal 2).
-      Prints a message and continues execution.
-      Triggered by Ctrl+C or kill -SIGINT <pid>.
+  Signal Handler:
 
-    - handle_sigterm(): Handles SIGTERM (signal 15).
-      Prints a message and exits gracefully.
-      Triggered by kill -SIGTERM <pid> or default kill.
-
-    - handle_sigusr1(): Handles SIGUSR1 (signal 10).
-      Prints a message and continues execution.
-      Triggered by kill -SIGUSR1 <pid>.
+    void handler(int sig):
+      - If the signal is SIGINT, prints "SIGINT received".
+      - If the signal is SIGTERM, prints "SIGTERM received".
+      - If the signal is SIGUSR1, prints "SIGUSR1 received".
 
   Main Program:
-    1. Register three signal handlers using signal().
-    2. Display the process PID.
-    3. Display the registered handlers.
-    4. Print instructions for sending signals.
-    5. Enter an infinite loop calling pause().
-       pause() suspends the process until a signal is caught.
+    1. Register handler() for SIGINT, SIGTERM and SIGUSR1
+       using signal().
+    2. Print the process PID ("Process ID: <pid>").
+    3. Enter an infinite loop:
+         - Print "Running...".
+         - sleep(2).
+       The process keeps running until the signals are sent.
 
-  Signal Flow:
+  Signal Delivery:
 
-    Terminal 1 (sighandle)          Terminal 2 (commands)
-    ────────────────────            ─────────────────────
+    Terminal 1 (sighandle)             Terminal 2 (commands)
+    -----------------------            ---------------------
     Register handlers
-    PID: 4501
-    Waiting for signals...
-                                    kill -SIGINT 4501
-    Caught SIGINT, continues
-                                    kill -SIGUSR1 4501
-    Caught SIGUSR1, continues
-                                    kill -SIGTERM 4501
-    Caught SIGTERM, exits
+    Process ID: 4938
+    Running...                         kill -INT 4938
+    SIGINT received (handler runs)
+    Running...                         kill -USR1 4938
+    SIGUSR1 received (handler runs)
+    Running...                         kill -TERM 4938
+    SIGTERM received (handler runs)
+    Running...
 
 Signals Handled:
 
-  Signal    Number   Default Action   Handler
-  ------    ------   --------------   -------
-  SIGINT       2     Terminate        handle_sigint (continue)
-  SIGTERM     15     Terminate        handle_sigterm (exit)
-  SIGUSR1     10     Terminate        handle_sigusr1 (continue)
+  Signal    Number   Source                       Handler action
+  ------    ------   ------                       --------------
+  SIGINT       2     Ctrl+C or kill -INT <pid>    prints SIGINT received
+  SIGTERM     15     kill -TERM <pid>             prints SIGTERM received
+  SIGUSR1     10     kill -USR1 <pid>             prints SIGUSR1 received
 
-  Note: SIGUSR1 and SIGUSR2 are reserved for user-defined
-  purposes. The default action for all three signals is to
-  terminate the process, but our handlers override this.
+  The default action of these signals is to terminate the
+  process, but the registered handler overrides the default
+  and only prints a message. So the process continues running.
 
 Observations:
 
 --- Program Output (outputs/sighandle_output.txt) ---
 
-  Process PID: 4501
-  Signal handlers registered for SIGINT, SIGTERM, SIGUSR1.
+  Process ID: 4938
+  Running...
+  Running...
+  SIGINT received
+  Running...
+  SIGUSR1 received
+  Running...
+  SIGTERM received
+  Running...
+  Running...
 
-  SIGINT test:
-    User pressed Ctrl+C (or kill -SIGINT 4501).
-    Handler printed "Caught SIGINT" message.
-    Process continued execution (did not terminate).
-
-  SIGUSR1 test:
-    User ran kill -SIGUSR1 4501 from another terminal.
-    Handler printed "Caught SIGUSR1" message.
-    Process continued execution.
-
-  SIGTERM test:
-    User ran kill -SIGTERM 4501 from another terminal.
-    Handler printed "Caught SIGTERM" message.
-    Process exited gracefully.
+  The kill -INT, kill -USR1 and kill -TERM commands were sent
+  to the process from another terminal. Each signal was caught
+  by the handler and the corresponding message was printed. The
+  process continued printing "Running..." after every signal.
 
 Compilation and Execution:
 
   gcc -o sighandle sighandle.c
   ./sighandle
 
-  In another terminal:
-    kill -SIGINT  <pid>
-    kill -SIGUSR1 <pid>
-    kill -SIGTERM <pid>
+  In another terminal, send signals to the process:
+  kill -INT  <pid>
+  kill -USR1 <pid>
+  kill -TERM <pid>
 
-  Or press Ctrl+C in the same terminal (for SIGINT).
+  The <pid> is the value printed by the program.
 
 Result:
-The program successfully demonstrates POSIX signal handling
-by registering custom handlers for three different signals.
-SIGINT and SIGUSR1 handlers allow the process to continue
-running after receiving the signal, while the SIGTERM handler
-performs a graceful exit. Signals were sent from another
-terminal using the kill command and were correctly caught
-and handled by the program.
+The program successfully demonstrated POSIX signal handling.
+The signal() system call registered one handler for SIGINT,
+SIGTERM and SIGUSR1. Sending kill -INT, kill -USR1 and
+kill -TERM from another terminal correctly triggered the
+handler, which printed "SIGINT received", "SIGUSR1 received"
+and "SIGTERM received" respectively. The process kept running
+after each signal.
 
 Conclusion:
-POSIX signals provide a software-based mechanism for
-inter-process communication and process control. The
-signal() system call allows a process to register custom
-handlers for specific signals, overriding the default
-termination behavior. SIGINT is typically generated by
-the terminal (Ctrl+C), SIGTERM is sent by the kill command
-by default, and SIGUSR1/SIGUSR2 are available for
-user-defined purposes. The pause() system call is useful
-for suspending a process until a signal is received.
+POSIX signals provide a way for the kernel or another process
+to notify a process of events. The signal() system call
+registers a custom handler that overrides the default action of
+a signal. SIGINT is generated by Ctrl+C or kill -INT, SIGTERM
+is a termination request from kill (default), and SIGUSR1 is a
+user-defined signal. Since the handler only prints a message,
+the process continued running after each signal was received.

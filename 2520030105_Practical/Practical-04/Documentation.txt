@@ -8,15 +8,17 @@ Roll Number  : 2520030105
 
 Objective:
 To understand zombie processes by creating a child process that
-exits before its parent collects its exit status, observing the
-Z (defunct) state, and then cleaning it up using wait().
+exits before the parent collects its exit status, observe the
+Z (defunct) state using the ps command, and understand how the
+wait() system call cleans up zombies.
 
 Requirements:
 1. Create a child process using fork().
-2. Have the child exit immediately while the parent sleeps.
-3. Observe the zombie (Z) state using ps command.
-4. Collect the child exit status using wait().
-5. Demonstrate cleanup of zombie processes.
+2. Display PID of both parent and child processes.
+3. Have the child exit immediately while the parent keeps
+   running without calling wait().
+4. Observe the zombie (Z) state using ps -l.
+5. Clean up the zombie using wait().
 
 Source Files:
 src/zombie.c
@@ -30,69 +32,84 @@ outputs/zombie_ps_output.txt
 Program Design:
 
 zombie.c:
-  Stage 1: Parent process starts and displays its PID.
-  Stage 2: fork() creates a child process.
-  Stage 3: Child exits immediately with exit(0).
-  Stage 4: Parent sleeps for 15 seconds without calling wait().
-           During this time the child is a zombie (Z state).
-  Stage 5: Parent calls wait() to collect child exit status.
-  Stage 6: Zombie is cleaned up and parent exits.
+  Step 1: Parent calls fork() to create a child process.
+  Step 2: Child prints its PID and exits immediately using
+          exit(0).
+  Step 3: Parent prints its PID and calls wait(NULL).
+          wait() collects the child exit status, so the
+          zombie entry is removed from the process table.
+  Step 4: Parent prints "Parent process completed" and exits.
+  Note: The commented sleep(30) line shows how the child can
+  be kept as a zombie for a longer time for observation.
 
 zombie1.c:
-  Stage 1: Parent starts and creates two children.
-  Stage 2: Both children exit immediately.
-  Stage 3: Both children become zombies.
-  Stage 4: Parent sleeps for 10 seconds.
-  Stage 5: Parent collects exit status of each child using
-           waitpid().
-  Stage 6: All zombies cleaned up, parent exits.
+  Step 1: A for loop runs 3 times, calling fork() each time.
+  Step 2: Each child prints its number and PID and exits
+          immediately.
+  Step 3: The parent prints its number and PID, then sleeps
+          for 40 seconds WITHOUT calling wait().
+  Step 4: During the sleep, the exited child is a zombie (Z
+          state) in the process table.
+  Step 5: After the sleep the parent prints "Parent process
+          complete" and creates the next child.
+  Step 6: The zombie children stay in the process table until
+          the parent exits, after which init/systemd adopts
+          and reaps them.
 
 Zombie Process:
 
 A zombie process is a process that has completed execution
 (exit()) but still has an entry in the process table. This
-happens because the parent has not yet called wait() to
-collect the child's exit status.
-
-The zombie state is indicated by 'Z' in the ps output and
-the process is shown as <defunct>.
+happens because the parent has not yet read the child's exit
+status using wait().
 
   Process Lifecycle:
-    Running -> Terminated -> Zombie -> (wait collected) -> Removed
+    Running -> Terminated -> Zombie -> (wait()) -> Removed
 
   Parent calls wait()/waitpid():
-    The kernel removes the zombie entry from the process table
-    and the parent receives the child's exit status.
+    The kernel removes the zombie entry from the process
+    table and the parent receives the child's exit status.
 
   Parent does NOT call wait():
-    The zombie entry remains in the process table until the
-    parent exits (init/systemd adopts and collects it).
+    The zombie entry remains in the process table. In ps -l
+    it is shown with state Z and no memory (SZ = 0). When the
+    parent exits, init/systemd adopts the zombie and reaps it.
 
 Observations:
 
 --- zombie.c Output (outputs/zombie_output.txt) ---
 
-  Parent PID: 4210
-  Child PID:  4211
-  Child exits immediately.
-  Parent sleeps for 15 seconds.
-  During sleep, child is visible as zombie (Z) in ps.
-  After 15 seconds, parent calls wait() and zombie is removed.
+  Child process 4927
+  Parent process 4926
+  Parent process completed
+
+  The child exits, the parent calls wait() immediately, so the
+  zombie is created only briefly and is cleaned up.
 
 --- zombie1.c Output (outputs/zombie1_output.txt) ---
 
-  Parent PID: 4305
-  Child 1 PID: 4306, exits with status 1
-  Child 2 PID: 4307, exits with status 2
-  Both children become zombies during parent sleep.
-  Parent collects each child status with waitpid().
+  Parent process 1 pid = 4980
+  Child process 1 pid = 4982
+  Parent process complete
+  Parent process 2 pid = 4980
+  Child process 2 pid = 4994
+  Parent process complete
+  Parent process 3 pid = 4980
+  Child process 3 pid = 5001
+  Parent process complete
+
+  Each child exits and remains a zombie while the parent sleeps
+  for 40 seconds (parent never calls wait()).
 
 --- ps Observation (outputs/zombie_ps_output.txt) ---
 
   F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
-  Z    1000    4211    4210  0  80   0     0 -      pts/0    00:00:00 zombie <defunct>
+  0 S  1000    4980    4962  0  80   0 -   822 hrtime pts/4    00:00:00 zombie1
+  1 Z  1000    4982    4980  0  80   0 -     0 -      pts/4    00:00:00 zombie1
 
-  The Z state and <defunct> label confirm the zombie process.
+  The child (PID 4982) is in state Z (zombie) with SZ = 0
+  (no memory allocated) and its parent is PID 4980. This
+  confirms the zombie state while the parent is sleeping.
 
 Compilation and Execution:
 
@@ -102,22 +119,22 @@ Compilation and Execution:
   gcc -o zombie1 zombie1.c
   ./zombie1
 
-  While the program is running, in another terminal:
-  ps -l | grep defunct
+  While zombie1 is running, in another terminal:
+  ps -l | grep zombie1
 
 Result:
-The programs successfully demonstrate the creation of zombie
-processes and their cleanup. zombie.c shows a single zombie
-created when the parent does not call wait() immediately.
-zombie1.c extends this to multiple children, showing that
-each child becomes a zombie and each must be collected
-individually using waitpid().
+Both programs demonstrate zombie process behavior. zombie.c
+creates a child that exits and is immediately reaped by the
+parent's wait() call. zombie1.c creates three children that
+exit while the parent sleeps for 40 seconds without waiting,
+leaving each child in the zombie (Z) state. The ps -l output
+clearly shows the Z state with SZ = 0 for the exited child.
 
 Conclusion:
 A zombie process is created when a child process exits before
-the parent calls wait(). The child's exit status is retained
-in the process table as a zombie entry until the parent
-collects it. If the parent exits without calling wait(), the
-zombie is adopted by init/systemd which automatically collects
-it. Proper use of wait()/waitpid() prevents zombie processes
-from accumulating in the system.
+its parent collects the exit status with wait(). The exited
+process keeps its entry in the process table as a zombie until
+the parent calls wait()/waitpid() to collect its status. If the
+parent never calls wait(), the zombie remains until the parent
+itself exits, after which init/systemd adopts and reaps it.
+The ps -l output shows zombies in state Z with size 0.

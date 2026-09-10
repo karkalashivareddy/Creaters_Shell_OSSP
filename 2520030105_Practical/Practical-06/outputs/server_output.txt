@@ -1,18 +1,3 @@
-$ gcc -o server server.c
-$ gcc -o cilent cilent.c
-$ ./server
-=== Server - Named Pipe Communication ===
+Client: Hello server from client
 
-FIFOs created: /tmp/server_fifo and /tmp/client_fifo
-Server waiting for client connection...
-Client connected!
-
-Server received: Hello Server
-Server sent response.
-
-Server received: How are you?
-Server sent response.
-
-Server received: exit
-Client sent exit command. Server shutting down.
-FIFOs removed. Server exiting.
+Enter response: 

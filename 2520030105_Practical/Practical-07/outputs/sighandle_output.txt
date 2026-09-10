@@ -1,29 +1,10 @@
-$ gcc -o sighandle sighandle.c
-$ ./sighandle
-=== POSIX Signal Handling ===
-
-Process PID: 4501
-
-Signal handlers registered:
-  SIGINT  (2)  -> handle_sigint
-  SIGTERM (15) -> handle_sigterm
-  SIGUSR1 (10) -> handle_sigusr1
-
-Try these commands in another terminal:
-  kill -SIGINT  4501
-  kill -SIGUSR1 4501
-  kill -SIGTERM 4501
-
-Waiting for signals... (press Ctrl+C or wait)
-
-^C
-Caught SIGINT (signal 2) - Interrupt from keyboard
-Process continuing...
-
-$ kill -SIGUSR1 4501
-Caught SIGUSR1 (signal 10) - User-defined signal 1
-Received user signal from another process.
-
-$ kill -SIGTERM 4501
-Caught SIGTERM (signal 15) - Termination signal
-Process will exit gracefully.
+Process ID: 4938
+Running...
+Running...
+SIGINT received
+Running...
+SIGUSR1 received
+Running...
+SIGTERM received
+Running...
+Running...
