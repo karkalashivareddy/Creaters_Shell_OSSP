@@ -1,0 +1,133 @@
+PRACTICAL-06
+Client Server Communication using Named Pipes (FIFO)
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Objective:
+To implement client-server communication using named pipes
+(FIFOs) in Linux, where the server and client exchange
+messages through two FIFO files.
+
+Requirements:
+1. Create two named pipes (FIFOs) for bidirectional
+   communication.
+2. Server reads messages from client and sends responses.
+3. Client sends messages and receives server responses.
+4. Graceful shutdown using an "exit" command.
+5. Clean up FIFO files after communication.
+
+Source Files:
+src/server.c
+src/cilent.c
+
+Output Files:
+outputs/server_output.txt
+outputs/cilent_output.txt
+
+Program Design:
+
+  Named Pipes (FIFOs):
+    - /tmp/server_fifo: Client writes, Server reads.
+    - /tmp/client_fifo: Server writes, Client reads.
+    - Created using mkfifo() with 0666 permissions.
+    - Two separate FIFOs provide bidirectional communication.
+
+  Server Program (server.c):
+    1. Create both FIFOs using mkfifo().
+    2. Open /tmp/server_fifo in read-only mode (blocks until
+       client connects).
+    3. Read messages from client in a loop.
+    4. For each message:
+       a. If message is "exit", break the loop.
+       b. Otherwise, open /tmp/client_fifo in write mode.
+       c. Send a response back to client.
+       d. Close client FIFO.
+    5. Close server FIFO.
+    6. Remove both FIFO files using unlink().
+
+  Client Program (cilent.c):
+    1. Open /tmp/server_fifo in write mode (connects to
+       server).
+    2. Open /tmp/client_fifo in read mode.
+    3. Read user input from terminal.
+    4. Send message to server via server FIFO.
+    5. If message is not "exit":
+       a. Read server response from client FIFO.
+       b. Display the response.
+    6. Close both FIFOs.
+
+  Communication Flow:
+
+    Terminal 1 (Server)              Terminal 2 (Client)
+    ──────────────────              ──────────────────
+    Create FIFOs
+    Wait for client...              Connect to server
+    Read message                    Send "Hello Server"
+    Send response                   Read response
+    Display response                Display response
+    ...                             ...
+    Read "exit"                     Send "exit"
+    Shutdown                        Disconnect
+    Remove FIFOs
+
+FIFO Behavior:
+
+  - mkfifo() creates a named pipe in the filesystem.
+  - open() on a FIFO blocks until both ends are opened.
+  - After both ends are open, read()/write() work like
+    regular file I/O but data flows through the kernel
+    buffer (pipe).
+  - FIFOs persist in the filesystem until explicitly
+    removed with unlink().
+  - Only one server and one client can communicate through
+    a given pair of FIFOs at a time.
+
+Observations:
+
+--- Server Output (outputs/server_output.txt) ---
+
+  Server creates FIFOs and waits for client.
+  Client connects and server reads three messages.
+  Server processes each message and sends responses.
+  Client sends "exit" and server shuts down.
+  FIFOs are cleaned up.
+
+--- Client Output (outputs/cilent_output.txt) ---
+
+  Client connects to server via FIFOs.
+  User types messages which are sent to server.
+  Server responses are received and displayed.
+  User sends "exit" to disconnect.
+
+Compilation and Execution:
+
+  gcc -o server server.c
+  gcc -o cilent cilent.c
+
+  Terminal 1:  ./server
+  Terminal 2:  ./cilent
+
+  In cilent terminal, type messages and press Enter.
+  Type "exit" to end the session.
+
+Result:
+The program successfully demonstrates bidirectional
+communication between a server and client using named pipes.
+Two FIFO files are used for each direction of communication.
+Messages sent by the client are received and processed by
+the server, and responses are sent back through the second
+FIFO. The communication terminates cleanly when the client
+sends the "exit" command.
+
+Conclusion:
+Named pipes (FIFOs) provide a simple mechanism for
+inter-process communication (IPC) on the same machine.
+Unlike anonymous pipes, FIFOs have a name in the filesystem
+and can be used by unrelated processes. Two FIFOs are needed
+for bidirectional communication since each FIFO is
+unidirectional. The server creates the FIFOs and the client
+connects to them, establishing a communication channel for
+exchanging messages.

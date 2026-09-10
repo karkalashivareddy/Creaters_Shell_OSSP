@@ -1,0 +1,14 @@
+$ ./cilent
+=== Client - Named Pipe Communication ===
+
+Connecting to server...
+Connected to server!
+
+Enter message (or 'exit' to quit): Hello Server
+Server response: Server processed: 'Hello Server'
+
+Enter message (or 'exit' to quit): How are you?
+Server response: Server processed: 'How are you?'
+
+Enter message (or 'exit' to quit): exit
+Disconnected from server.

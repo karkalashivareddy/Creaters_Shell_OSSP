@@ -1,0 +1,118 @@
+PRACTICAL-05
+Producer Consumer Problem
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Objective:
+To implement the producer-consumer problem using shared memory
+and semaphores, demonstrating synchronization between concurrent
+processes with a bounded buffer.
+
+Requirements:
+1. Create a shared memory segment for the bounded buffer.
+2. Use semaphores for synchronization (mutex, full, empty).
+3. Implement a producer process that generates items.
+4. Implement a consumer process that consumes items.
+5. Ensure mutual exclusion and proper synchronization.
+
+Source File:
+src/pod_con.c
+
+Output Files:
+outputs/pod_con_output.txt
+
+Program Design:
+
+The program uses System V IPC mechanisms:
+
+  Shared Memory:
+    - Created with shmget() using a key from ftok().
+    - Buffer of 5 integer slots (BUFFER_SIZE = 5).
+    - Attached with shmat() and detached with shmdt().
+
+  Semaphores (3 semaphores):
+    - Semaphore 0 (empty): Counts empty buffer slots.
+      Initialized to BUFFER_SIZE (5).
+    - Semaphore 1 (full):  Counts filled buffer slots.
+      Initialized to 0.
+    - Semaphore 2 (mutex): Provides mutual exclusion.
+      Initialized to 1.
+
+  Producer Process:
+    1. Generate a random item.
+    2. Wait on empty (decrement empty count).
+    3. Wait on mutex (enter critical section).
+    4. Place item in buffer at 'in' position.
+    5. Advance 'in' index (circular).
+    6. Signal mutex (leave critical section).
+    7. Signal full (increment full count).
+    8. Repeat for NUM_ITEMS (10) items.
+
+  Consumer Process:
+    1. Wait on full (decrement full count).
+    2. Wait on mutex (enter critical section).
+    3. Remove item from buffer at 'out' position.
+    4. Advance 'out' index (circular).
+    5. Signal mutex (leave critical section).
+    6. Signal empty (increment empty count).
+    7. Repeat until all items consumed.
+
+  Parent (main):
+    - Creates shared memory and semaphores.
+    - Forks producer (child) process.
+    - Consumer runs in parent process.
+    - After completion, cleans up all IPC resources.
+
+Synchronization:
+
+  empty (sem 0): Producer waits, Consumer signals.
+  full  (sem 1): Consumer waits, Producer signals.
+  mutex (sem 2): Both wait/signal for critical section.
+
+  This ensures:
+    - Producer cannot write to a full buffer.
+    - Consumer cannot read from an empty buffer.
+    - Only one process accesses the buffer at a time.
+
+Observations:
+
+--- Program Output (outputs/pod_con_output.txt) ---
+
+  Producer produces 10 items with random values (0-99).
+  Consumer consumes each item in order.
+  Items are produced and consumed in circular buffer positions.
+  All 10 items are produced and consumed successfully.
+  IPC resources are cleaned up at the end.
+
+  Sample output shows interleaved production and consumption:
+    Producer: produced item 42 at position 0
+    Consumer: consumed item 42 from position 0
+    Producer: produced item 87 at position 1
+    Consumer: consumed item 87 from position 1
+    ...
+
+Compilation and Execution:
+
+  gcc -o pod_con pod_con.c
+  ./pod_con
+
+Result:
+The program successfully implements the producer-consumer
+problem using shared memory and System V semaphores. The
+bounded buffer of size 5 is used by both producer and consumer
+processes with proper synchronization. No race conditions
+occurred, and all items were produced and consumed in the
+correct order.
+
+Conclusion:
+The producer-consumer problem demonstrates the need for
+synchronization between concurrent processes sharing a
+common resource. Semaphores provide an effective mechanism
+for coordinating access to a bounded buffer, preventing
+both buffer overflow (producer writing to full buffer) and
+buffer underflow (consumer reading from empty buffer).
+The mutex semaphore ensures mutual exclusion in the critical
+section.

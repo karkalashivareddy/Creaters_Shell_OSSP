@@ -1,0 +1,19 @@
+$ gcc -o zombie zombie.c
+$ ./zombie
+=== Zombie Process Demonstration ===
+
+Parent process started.
+Parent PID: 4210
+
+Parent created child with PID: 4211
+Child is now a zombie (Z state) because parent did not call wait().
+Run 'ps -l' in another terminal to see the zombie process.
+Parent sleeping for 15 seconds...
+Check 'ps -l | grep defunct' before parent exits.
+
+Child process created.
+Child PID: 4211
+Child PPID: 4210
+Child exiting immediately.
+Parent now calling wait() to collect child exit status.
+Zombie cleaned up. Parent exiting.

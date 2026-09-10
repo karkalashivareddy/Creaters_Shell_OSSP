@@ -1,0 +1,30 @@
+$ gcc -o pod_con pod_con.c
+$ ./pod_con
+=== Producer Consumer Problem ===
+
+Shared memory and semaphores created.
+Buffer size: 5, Items to produce: 10
+
+Producer: produced item 42 at position 0
+Consumer: consumed item 42 from position 0
+Producer: produced item 87 at position 1
+Consumer: consumed item 87 from position 1
+Producer: produced item 15 at position 2
+Consumer: consumed item 15 from position 2
+Producer: produced item 63 at position 3
+Consumer: consumed item 63 from position 3
+Producer: produced item 91 at position 4
+Consumer: consumed item 91 from position 4
+Producer: produced item 28 at position 0
+Consumer: consumed item 28 from position 0
+Producer: produced item 54 at position 1
+Consumer: consumed item 54 from position 1
+Producer: produced item 7 at position 2
+Consumer: consumed item 7 from position 2
+Producer: produced item 76 at position 3
+Consumer: consumed item 76 from position 3
+Producer: produced item 33 at position 4
+Consumer: consumed item 33 from position 4
+
+All 10 items produced and consumed.
+Shared memory and semaphores cleaned up.
