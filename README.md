@@ -1,44 +1,72 @@
-﻿# Creaters_Shell_OSSP
+# OSSP Systems Programming Collection
 
-## OSSP Project
+`Creaters_Shell_OSSP` is a Linux systems-programming coursework repository focused on processes, signals, terminal I/O, `/proc`, files, and inter-process communication. It contains practical exercises from more than one module and a small interactive shell implementation.
 
-### Project Title
+The repository should be read as a systems-programming collection, not as a single production shell or operating-system distribution.
 
-**Linux Process Monitoring and Control System**
+## Featured implementation: mini shell
 
-### Team Members
+[`2520030105_Skill/Skill-02/src/mini_shell.c`](2520030105_Skill/Skill-02/src/mini_shell.c) implements a terminal-aware mini shell in C. It currently provides:
 
-| Name | Roll Number |
-|---|---|
-| Karkala Shiva Reddy | 2520030105 |
-| Dakur Manoj Kumar | 2520030040 |
+- raw terminal mode when attached to a TTY, with a line-mode fallback;
+- `help`, `pwd`, `echo`, `clear`, `exit`, and `quit` built-ins;
+- whitespace tokenization with a bounded argument array;
+- external command execution using `fork()` and `execvp()`;
+- parent/child synchronization through `wait()`;
+- SIGINT/SIGTERM handling and terminal restoration.
 
-### Project Directory
+It does not currently claim pipelines, job control, or shell quoting/escaping.
 
-The OSSP project is maintained in:
+## Related systems exercises
 
-`ForgeOS/`
+The repository also includes C examples for:
 
-### Project Documentation
+- `fork()` and `exec()` process creation;
+- process states and `/proc` observations;
+- zombie processes;
+- signal handling;
+- FIFO/named-pipe communication;
+- file-copy and file-descriptor exercises;
+- `strace`, `ps`, `top`, and other Linux observation outputs.
 
-- [Project README](ForgeOS/README.md)
-- [Project Title](ForgeOS/PROJECT_TITLE.md)
-- [Abstract](ForgeOS/docs/OSSP_Abstract.md)
-- [Team Contributions](ForgeOS/docs/TEAM_CONTRIBUTIONS.md)
+## Build and run the mini shell
 
-### Core Technologies
+Use a Linux environment, WSL, or another POSIX-compatible toolchain with `gcc`:
 
-- C
-- Ubuntu/Linux
-- Linux/POSIX system calls
-- `/proc` filesystem
-- Process management
-- Linux signals
-- File I/O
-- File descriptors
-- GDB
-- strace
+```bash
+cd 2520030105_Skill/Skill-02
+gcc -Wall -Wextra -std=c11 src/mini_shell.c -o mini_shell
+./mini_shell
+```
 
-### Project Status
+Try `help`, `pwd`, `echo hello`, or an installed external command. Press `Ctrl+C` to exercise the signal handler and `exit` to leave the shell.
 
-The project title, abstract, problem statement, objectives, proposed methodology, Linux/POSIX concepts, team contributions, tools, and expected outcome have been documented. Implementation and testing will be completed in subsequent development stages.
+Other exercises have their own `Makefile` or documentation under the corresponding `Practical-*`/`Skill-*` directory; compile them from that directory rather than assuming one repository-wide build.
+
+## Repository layout
+
+```text
+2520030105_Skill/       Shiva's skill work, including the featured mini shell
+2520030105_Practical/   Shiva's OS practicals and captured observations
+2520030040_Skill/       teammate skill work
+2520030040_Practical/   teammate practical work
+ForgeOS/                project notes and team documentation
+ForgeOS_Backup/         existing backup material; not the primary build target
+```
+
+Screenshots and command outputs are retained beside the exercise that produced them. They are evidence for the coursework, not a substitute for running the programs.
+
+## Engineering notes
+
+- The shell uses a bounded input buffer and argument array, but it is intentionally educational and does not implement a full POSIX shell grammar.
+- Terminal settings are restored on normal exit and in the signal handler.
+- The practicals demonstrate low-level OS behavior through executable C programs and Linux inspection tools.
+
+## Contributors
+
+- **Karkala Shiva Reddy**
+- Dakur Manoj Kumar
+
+## Author
+
+**Karkala Shiva Reddy** — [GitHub](https://github.com/karkalashivareddy)
