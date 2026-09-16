@@ -17,6 +17,17 @@ The repository should be read as a systems-programming collection, not as a sing
 
 It does not currently claim pipelines, job control, or shell quoting/escaping.
 
+```mermaid
+flowchart LR
+    I[Terminal input] --> T[Tokenizer]
+    T --> B[Built-in command dispatch]
+    T --> F[fork]
+    F --> E[Child: execvp]
+    F --> W[Parent: wait]
+    G[SIGINT/SIGTERM] --> R[Restore terminal]
+    R --> X[Exit]
+```
+
 ## Related systems exercises
 
 The repository also includes C examples for:
