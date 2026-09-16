@@ -21,16 +21,16 @@ Responsible for designing and implementing the process monitoring module.
 
 ### 2. Dakur Manoj Kumar — 2520030040
 
-Responsible for designing and implementing the process control module.
+Assigned the process-control part of the practical work.
 
 ### Contributions
 
-- Implement process-control operations using Linux signals and system calls.
-- Work with `SIGSTOP`, `SIGCONT`, `SIGTERM`, and `SIGKILL`.
-- Implement controlled pause, resume, graceful termination, and forced termination operations.
-- Contribute to system integration.
-- Participate in testing and debugging.
-- Contribute to project documentation and final presentation.
+- Submitted screenshots demonstrating completion of the assigned practicals and skills.
+- Contribute to overall system integration, testing, and project documentation.
+
+### Note on source code
+
+The repository does **not** currently contain source code for Manoj's parts. Every source file under `2520030040_Practical/` and `2520030040_Skill/` (for example `src/program.c`, `src/file_copy.c`, `src/process_states.c`, `src/fork_demo.c`, `src/exec_demo.c`, and `src/mini_shell.c`) is empty (0 bytes). What exists is the screenshots he provided. Any specific claims about signal-based process control implemented earlier — such as `SIGSTOP`, `SIGCONT`, `SIGTERM`, and `SIGKILL` usage — are not backed by code present in this repository and have therefore been removed from this document.
 
 ## Shared Responsibilities
 

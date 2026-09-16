@@ -62,7 +62,6 @@ Other exercises have their own `Makefile` or documentation under the correspondi
 2520030040_Skill/       teammate skill work
 2520030040_Practical/   teammate practical work
 ForgeOS/                project notes and team documentation
-ForgeOS_Backup/         existing backup material; not the primary build target
 ```
 
 Screenshots and command outputs are retained beside the exercise that produced them. They are evidence for the coursework, not a substitute for running the programs.
