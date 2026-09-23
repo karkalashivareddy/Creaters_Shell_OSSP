@@ -1,0 +1,9 @@
+Parent process 1 pid = 4980
+Child process 1 pid = 4982
+Parent process complete
+Parent process 2 pid = 4980
+Child process 2 pid = 4994
+Parent process complete
+Parent process 3 pid = 4980
+Child process 3 pid = 5001
+Parent process complete

@@ -1,0 +1,109 @@
+PRACTICAL-05
+Producer Consumer Problem
+
+OSSP (Operating Systems And Systems Programming) - 25CS2104E
+
+Student Name : Karkala Shiva Reddy
+Roll Number  : 2520030105
+
+Objective:
+To implement the producer-consumer problem using an anonymous
+pipe (pipe()) where the producer process writes items through
+the pipe and the consumer process reads them, and to measure
+the communication time and efficiency.
+
+Requirements:
+1. Create an anonymous pipe using pipe().
+2. Create producer (parent) and consumer (child) processes
+   using fork().
+3. Producer writes 5 items to the pipe.
+4. Consumer reads the 5 items from the pipe.
+5. Measure communication time and efficiency using clock().
+
+Source File:
+src/pod_con.c
+
+Output Files:
+outputs/pod_con_output.txt
+
+Program Design:
+
+  Step 1: pipe(fd) creates a pipe with two ends.
+          - fd[0] is the read end.
+          - fd[1] is the write end.
+  Step 2: fork() creates the consumer (child) and the producer
+          (parent).
+  Step 3: Consumer (child) process:
+          - Closes the write end (fd[1]).
+          - Prints "Consumer".
+          - Reads 5 integers one by one from the pipe.
+          - Prints "Consumed <value>" for each item.
+          - Closes the read end (fd[0]).
+  Step 4: Producer (parent) process:
+          - Closes the read end (fd[0]).
+          - Prints "Producer".
+          - Writes 5 items (10, 20, 30, 40, 50) to the pipe.
+          - Prints "Prodeuced <value>" for each item.
+          - Closes the write end (fd[1]).
+  Step 5: Producer waits for the consumer with wait().
+  Step 6: Producer measures the total time with clock():
+            time = (end - start) / CLOCKS_PER_SEC
+          and calculates efficiency:
+            efficiency = 5 / time
+          where 5 is the number of messages transferred.
+
+Pipe Working:
+
+  - A pipe is a unidirectional data channel.
+  - Data written to fd[1] is read from fd[0] in FIFO order.
+  - The pipe has a kernel buffer; writes block only when the
+    buffer is full.
+  - The producer and consumer run concurrently, so the pipe
+    provides the synchronization and communication between
+    them.
+
+Observations:
+
+--- Program Output (outputs/pod_con_output.txt) ---
+
+  Consumer
+  Consumed 10
+  Consumed 20
+  Consumed 30
+  Consumed 40
+  Consumed 50
+  Producer
+  Prodeuced 10
+  Prodeuced 20
+  Prodeuced 30
+  Prodeuced 40
+  Prodeuced 50
+  Communication time is 0.000766
+  Communication Efficiency is 6527.415144
+
+  The producer (parent) wrote the 5 items and the consumer
+  (child) received all 5 items through the pipe. The
+  communication time includes the pipe write/read transfer and
+  the clock() overhead. Efficiency is computed as the number of
+  messages divided by the time taken.
+
+Compilation and Execution:
+
+  gcc -o pod_con pod_con.c
+  ./pod_con
+
+Result:
+The program successfully demonstrates the producer-consumer
+problem using a pipe. The producer process wrote 5 items
+(10, 20, 30, 40, 50) into the pipe and the consumer process
+read all 5 items from the pipe in the correct order. The
+communication time and efficiency were measured and printed
+by the producer after the consumer finished.
+
+Conclusion:
+The producer-consumer problem shows how two processes can
+communicate through an anonymous pipe. The pipe provides a
+simple FIFO channel: the producer writes on the write end and
+the consumer reads on the read end. clock() was used to measure
+the communication time between the processes, and the
+efficiency was computed as messages transferred per second.

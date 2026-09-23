@@ -1,0 +1,14 @@
+Consumer
+Consumed 10
+Consumed 20
+Consumed 30
+Consumed 40
+Consumed 50
+Producer 
+Prodeuced 10
+Prodeuced 20
+Prodeuced 30
+Prodeuced 40
+Prodeuced 50
+Communication time is 0.000766
+Communication Efficiency is 6527.415144
