@@ -1,0 +1,9 @@
+--- Consumer ---
+Items consumed   : 100000
+
+--- Producer ---
+Data transferred : 400000 bytes
+Time taken       : 0.016504 seconds
+Throughput       : 24236548.72 bytes/second
+
+
