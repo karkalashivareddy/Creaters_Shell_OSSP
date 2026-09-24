@@ -1,3 +1,19 @@
 Child process 4927
 Parent process 4926
 Parent process completed
+
+
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    4980    4962  0  80   0 -   822 hrtime pts/4    00:00:00 zombie1
+1 Z  1000    4982    4980  0  80   0 -     0 -      pts/4    00:00:00 zombie1
+
+
+Parent process 1 pid = 4980
+Child process 1 pid = 4982
+Parent process complete
+Parent process 2 pid = 4980
+Child process 2 pid = 4994
+Parent process complete
+Parent process 3 pid = 4980
+Child process 3 pid = 5001
+Parent process complete
