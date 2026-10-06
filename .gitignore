@@ -2,3 +2,8 @@
 *.out
 *.exe
 .vscode/
+
+# Local-only archive described in the README. Ignoring it makes the README's
+# "not part of the published repository" statement true by construction rather
+# than by remembering not to stage it.
+/ForgeOS_Backup/

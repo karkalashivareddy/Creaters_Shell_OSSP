@@ -61,10 +61,16 @@ Other exercises have their own `Makefile` or documentation under the correspondi
 2520030105_Practical/   Shiva's OS practicals and captured observations
 2520030040_Skill/       teammate skill work
 2520030040_Practical/   teammate practical work
-ForgeOS/                project notes and team documentation
+ForgeOS/                in-progress project skeleton (NanoKernel/, Shellforge/ placeholders + team docs)
+ForgeOS_Backup/         local-only backup archive (git-ignored; not part of the published repository)
 ```
 
 Screenshots and command outputs are retained beside the exercise that produced them. They are evidence for the coursework, not a substitute for running the programs.
+
+> **Status**
+> - Coursework (`Practical-*`, `Skill-*` directories) is committed and demonstrably runnable.
+> - `ForgeOS/` exists as a skeleton and is **not** a complete product — it is "implementation and testing in progress".
+> - `ForgeOS_Backup/` is an archive kept locally; because it is not tracked by git it does not appear in a fresh clone.
 
 ## Engineering notes
 
